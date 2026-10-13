@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Out of Office</title>
+  <link rel="icon" href="data:,">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap">
+  <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="css/desk.css">
+  <link rel="stylesheet" href="css/spotter.css">
+</head>
+<body>
+  <div id="viewport">
+    <div id="stage" data-day="1">
+      <div class="wall"></div>
+      <div class="desk-surface"></div>
+
+      <div id="window" class="window" aria-label="Window"></div>
+      <div id="notes" class="notes-area"></div>
+      <div id="calendar" class="calendar"></div>
+
+      <button id="notebook" class="notebook" aria-label="Notebook">
+        <span class="notebook-cover"><span class="notebook-label">notes</span></span>
+        <span class="notebook-count" id="notebook-count">0</span>
+      </button>
+      <button id="mug" class="mug" aria-label="Coffee">
+        <span class="mug-steam"></span>
+        <span class="mug-body"><span class="mug-fill"></span><span class="mug-chip"></span></span>
+        <span class="mug-handle"></span>
+      </button>
+
+      <button id="drawer" class="drawer" aria-label="Desk drawer">
+        <span class="drawer-label">drawer</span>
+        <span class="drawer-new hidden" id="drawer-new">new</span>
+      </button>
+
+      <div id="laptop" class="laptop">
+        <div class="laptop-screen">
+          <div class="menubar">
+            <span class="menubar-logo">✦ DeskHire OS</span>
+            <span id="hud-day"></span>
+            <span class="menubar-spacer"></span>
+            <span id="hud-money"></span>
+            <span id="hud-clock"></span>
+          </div>
+          <div id="app-area" class="app-area"></div>
+        </div>
+        <div class="laptop-base"></div>
+      </div>
+
+      <div class="phone-dock"></div>
+      <div id="phone" class="phone">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="phone-status"><span id="phone-time">18:30</span><span>▮▮▮ 5G</span></div>
+          <div id="phone-body" class="phone-body"></div>
+          <div id="phone-banner" class="phone-banner hidden"></div>
+        </div>
+      </div>
+
+      <div id="overlay" class="overlay hidden"></div>
+      <div id="toasts" class="toasts"></div>
+    </div>
+  </div>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

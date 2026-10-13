@@ -1,0 +1,52 @@
+/* Palette tokens. The desk drifts darker each day (Monday dusk → Friday night). */
+:root {
+  --font-ui: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --font-hand: 'Caveat', cursive;
+
+  --ink: #e9f1f2;
+  --muted: #8ea3a8;
+  --accent: #e0453a;
+  --accent-2: #2fb5a3;
+  --paper: #efe6d2;
+  --paper-ink: #2a2622;
+  --cork: #b98a57;
+  --cork-2: #a77847;
+  --note: #ffe27a;
+  --note-strange: #cfeaf7;
+  --screen-bg: #0f1b20;
+  --panel: #141b20;
+  --panel-line: #2c3a40;
+}
+
+#stage[data-day="1"],
+#stage[data-day="2"] {
+  --wall: #34454d;
+  --wall-2: #2a3940;
+  --desk: #5e4938;
+  --desk-2: #4b3a2c;
+  --desk-edge: #3a2c22;
+  --glow: rgba(255, 190, 120, 0.10);
+  --shade: rgba(0, 0, 0, 0.35);
+}
+
+#stage[data-day="3"] {
+  --wall: #26343c;
+  --wall-2: #1e2a31;
+  --desk: #4b3b2e;
+  --desk-2: #3b2e24;
+  --desk-edge: #2d221a;
+  --glow: rgba(120, 200, 255, 0.10);
+  --shade: rgba(0, 0, 0, 0.5);
+}
+
+#stage[data-day="4"],
+#stage[data-day="5"] {
+  --wall: #121a1f;
+  --wall-2: #0c1216;
+  --desk: #2c241d;
+  --desk-2: #221b16;
+  --desk-edge: #18120e;
+  --glow: rgba(110, 220, 255, 0.16);
+  --shade: rgba(0, 0, 0, 0.68);
+}
