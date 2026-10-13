@@ -166,7 +166,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
 /* ---------- Mug ---------- */
 .mug {
   position: absolute;
-  left: 235px; top: 650px;
+  left: 245px; top: 735px;
   width: 120px; height: 130px;
   background: none; border: 0; padding: 0;
 }
