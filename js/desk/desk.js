@@ -55,16 +55,18 @@ const DAYS = [
   { label: 'Tue', note: '' },
   { label: 'Wed', note: '' },
   { label: 'Thu', note: '' },
-  { label: 'Fri', note: 'RENT! noon' },
+  { label: 'Fri', note: 'RENT! noon', due: true },
 ];
 
+// The tent calendar on the desk: one column per weekday.
 export function renderCalendar(day) {
   const items = DAYS.map((d, i) => {
     const n = i + 1;
-    const cls = n === day ? 'today' : n < day ? 'past' : '';
-    return `<li class="${cls}"><span>${d.label}</span><span class="hand">${d.note}</span></li>`;
+    const cls = [n === day ? 'today' : n < day ? 'past' : '', d.due ? 'due' : ''].join(' ').trim();
+    return `<div class="cal-day ${cls}"><b>${d.label}</b><span class="hand">${d.note}</span></div>`;
   }).join('');
-  document.getElementById('calendar').innerHTML = `<h5>THIS WEEK</h5><ul>${items}</ul>`;
+  document.getElementById('calendar').innerHTML =
+    `<div class="cal-rings">${'<i></i>'.repeat(8)}</div><h5>THIS WEEK</h5><div class="cal-days">${items}</div>`;
 }
 
 export function showOverlay(html) {

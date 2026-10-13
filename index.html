@@ -7,7 +7,7 @@
   <link rel="icon" href="data:,">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600;700&display=swap">
   <link rel="stylesheet" href="css/theme.css">
   <link rel="stylesheet" href="css/desk.css">
   <link rel="stylesheet" href="css/spotter.css">
@@ -16,21 +16,79 @@
   <div id="viewport">
     <div id="stage" data-day="1">
       <div class="wall"></div>
-      <div class="desk-surface"></div>
+      <svg class="desk-surface" viewBox="0 0 1600 340" aria-hidden="true">
+        <defs>
+          <linearGradient id="desk-top" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" style="stop-color: var(--desk-edge)"/><stop offset=".45" style="stop-color: var(--desk-2)"/><stop offset="1" style="stop-color: var(--desk)"/>
+          </linearGradient>
+          <radialGradient id="desk-screenlight" cx=".52" cy=".05" r=".55">
+            <stop offset="0" style="stop-color: #8cbef0; stop-opacity: .22"/><stop offset="1" style="stop-color: #8cbef0; stop-opacity: 0"/>
+          </radialGradient>
+          <radialGradient id="desk-dusk" cx=".14" cy=".1" r=".35">
+            <stop offset="0" style="stop-color: var(--dusk)"/><stop offset="1" style="stop-color: var(--dusk); stop-opacity: 0"/>
+          </radialGradient>
+          <linearGradient id="desk-front" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" style="stop-color: var(--desk-edge)"/><stop offset="1" style="stop-color: #0e0906"/>
+          </linearGradient>
+        </defs>
+        <rect width="1600" height="286" fill="url(#desk-top)"/>
+        <g stroke="#1c120c" stroke-width="2" opacity=".35">
+          <line x1="-566" y1="0" x2="-1000" y2="286"/><line x1="-482" y1="0" x2="-890" y2="286"/><line x1="-399" y1="0" x2="-780" y2="286"/><line x1="-316" y1="0" x2="-670" y2="286"/><line x1="-232" y1="0" x2="-560" y2="286"/><line x1="-149" y1="0" x2="-450" y2="286"/><line x1="-65" y1="0" x2="-340" y2="286"/><line x1="18" y1="0" x2="-230" y2="286"/><line x1="102" y1="0" x2="-120" y2="286"/><line x1="185" y1="0" x2="-10" y2="286"/><line x1="269" y1="0" x2="100" y2="286"/><line x1="352" y1="0" x2="210" y2="286"/><line x1="436" y1="0" x2="320" y2="286"/><line x1="519" y1="0" x2="430" y2="286"/><line x1="603" y1="0" x2="540" y2="286"/><line x1="686" y1="0" x2="650" y2="286"/><line x1="770" y1="0" x2="760" y2="286"/><line x1="853" y1="0" x2="870" y2="286"/><line x1="937" y1="0" x2="980" y2="286"/><line x1="1020" y1="0" x2="1090" y2="286"/><line x1="1104" y1="0" x2="1200" y2="286"/><line x1="1187" y1="0" x2="1310" y2="286"/><line x1="1270" y1="0" x2="1420" y2="286"/><line x1="1354" y1="0" x2="1530" y2="286"/><line x1="1437" y1="0" x2="1640" y2="286"/><line x1="1521" y1="0" x2="1750" y2="286"/><line x1="1604" y1="0" x2="1860" y2="286"/><line x1="1688" y1="0" x2="1970" y2="286"/><line x1="1771" y1="0" x2="2080" y2="286"/>
+        </g>
+        <rect width="1600" height="286" fill="url(#desk-screenlight)"/>
+        <rect width="1600" height="286" fill="url(#desk-dusk)"/>
+        <rect width="1600" height="10" fill="#000" opacity=".35"/>
+        <rect y="284" width="1600" height="4" fill="#8a6447" opacity=".6"/>
+        <rect y="288" width="1600" height="52" fill="url(#desk-front)"/>
+      </svg>
       <div id="dust" class="dust" aria-hidden="true"></div>
 
       <div id="window" class="window" aria-label="Window"></div>
+      <div class="window-sill"></div>
+
+      <div class="pegboard"></div>
       <div id="notes" class="notes-area"></div>
+
+      <div class="calendar-shadow"></div>
+      <div class="calendar-stand"></div>
       <div id="calendar" class="calendar"></div>
 
       <button id="notebook" class="notebook" aria-label="Notebook">
-        <span class="notebook-cover"><span class="notebook-label">notes</span></span>
+        <svg class="notebook-art" viewBox="0 0 250 160" aria-hidden="true">
+          <polygon points="30,40 190,22 228,120 48,144" fill="#000" opacity=".5" style="filter: blur(6px)"/>
+          <g class="nb-lift">
+            <polygon points="20,24 178,8 214,104 40,128" fill="#24252a"/>
+            <polygon points="20,24 32,23 51,127 40,128" fill="#0b0b0d"/>
+            <polygon points="40,128 214,104 214,113 40,137" fill="#e3d9c2"/>
+            <g stroke="#b9ad93" stroke-width=".8"><line x1="40" y1="131" x2="214" y2="107"/><line x1="40" y1="134" x2="214" y2="110"/></g>
+            <polygon points="178,8 214,104 214,113 179,15" fill="#cfc4ab"/>
+            <polygon points="162,10 168,9 202,105 196,106" fill="#b0201a"/>
+            <polygon points="196,106 202,105 202,114 196,115" fill="#7e1712"/>
+            <polygon points="20,24 178,8 179,10 21,26" fill="#3a3b41"/>
+            <text x="110" y="78" text-anchor="middle" font-family="Caveat, cursive" font-size="34" font-weight="700" fill="#d8d2c4" transform="rotate(-7 110 78) skewX(-12)">notes</text>
+          </g>
+        </svg>
         <span class="notebook-count" id="notebook-count">0</span>
       </button>
       <button id="mug" class="mug" aria-label="Coffee">
+        <svg class="mug-art" viewBox="0 0 140 150" aria-hidden="true">
+          <defs>
+            <linearGradient id="mug-glaze" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0" style="stop-color: #3a70b4"/><stop offset=".3" style="stop-color: #4f8ad2"/><stop offset=".6" style="stop-color: #2f5f9e"/><stop offset="1" style="stop-color: #1c3a64"/>
+            </linearGradient>
+          </defs>
+          <ellipse cx="66" cy="132" rx="50" ry="14" fill="#000" opacity=".55" style="filter: blur(4px)"/>
+          <g class="mug-lift">
+            <path d="M94 66 C124 62 126 112 93 110" fill="none" stroke="#2a5590" stroke-width="10" stroke-linecap="round"/>
+            <path d="M13 50 L15 128 A40 12.5 0 0 0 95 128 L97 50 Z" fill="url(#mug-glaze)"/>
+            <ellipse cx="55" cy="50" rx="42" ry="13" fill="#24497c"/>
+            <ellipse cx="55" cy="51" rx="38" ry="11" fill="#1a120d"/>
+            <ellipse class="mug-fill" cx="55" cy="54" rx="34" ry="8.5" fill="#6b4226"/>
+            <polygon points="76,60.5 86,58.6 80,64.5" fill="#d9d2c4"/>
+            <rect x="24" y="64" width="6" height="58" rx="3" fill="#ffffff" opacity=".16"/>
+          </g>
+        </svg>
         <span class="mug-steam"><i></i><i></i><i></i></span>
-        <span class="mug-body"><span class="mug-fill"></span><span class="mug-chip"></span></span>
-        <span class="mug-handle"></span>
       </button>
 
       <button id="drawer" class="drawer" aria-label="Desk drawer">
@@ -38,6 +96,7 @@
         <span class="drawer-new hidden" id="drawer-new">new</span>
       </button>
 
+      <div class="laptop-shadow"></div>
       <div id="laptop" class="laptop">
         <div class="laptop-screen">
           <div class="menubar">
@@ -49,7 +108,19 @@
           </div>
           <div id="app-area" class="app-area"></div>
         </div>
-        <div class="laptop-base"></div>
+        <svg class="laptop-base" viewBox="0 0 1060 64" aria-hidden="true">
+          <defs>
+            <linearGradient id="laptop-deck" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" style="stop-color: #9a9ea5"/><stop offset="1" style="stop-color: #d0d3d8"/>
+            </linearGradient>
+          </defs>
+          <polygon points="60,6 1000,6 1050,52 10,52" fill="url(#laptop-deck)"/>
+          <polygon points="150,12 910,12 936,36 124,36" fill="#7c8088"/>
+          <g stroke="#9a9ea5" stroke-width="1.2"><line x1="140" y1="20" x2="922" y2="20"/><line x1="132" y1="28" x2="930" y2="28"/></g>
+          <polygon points="468,40 592,40 598,49 462,49" fill="#b4b8be"/>
+          <polygon points="10,52 1050,52 1046,60 14,60" fill="#6c7077"/>
+          <rect x="60" y="5" width="940" height="2" fill="#5d6168"/>
+        </svg>
       </div>
 
       <div class="phone-dock"></div>
