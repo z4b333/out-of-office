@@ -21,12 +21,20 @@ function svg(inner, { w = 320, h = 200, label = '' } = {}) {
   return `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">${inner}${tag}</svg>`;
 }
 
-function windows(r, x0, y0, cols, rows, w, h, gap, litChance, lit = '#f2c27a', dark = '#1b2129') {
+// `live` is the chance a window gets an animated overlay: a light switching on or off
+// now and then, or the blue flicker of a TV. Only the desk window view uses it.
+function windows(r, x0, y0, cols, rows, w, h, gap, litChance, lit = '#f2c27a', dark = '#1b2129', live = 0) {
   let out = '';
   for (let i = 0; i < cols; i++) {
     for (let j = 0; j < rows; j++) {
       const on = r() < litChance;
-      out += `<rect x="${x0 + i * (w + gap)}" y="${y0 + j * (h + gap)}" width="${w}" height="${h}" fill="${on ? lit : dark}" opacity="${on ? 0.85 : 1}"/>`;
+      const x = x0 + i * (w + gap), y = y0 + j * (h + gap);
+      out += `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${on ? lit : dark}" opacity="${on ? 0.85 : 1}"/>`;
+      if (live && r() < live) {
+        const tv = on && r() < 0.4;
+        const timing = `animation-duration:${(tv ? 3 : 16) + r() * 14}s;animation-delay:-${r() * 30}s`;
+        out += `<rect class="${tv ? 'win-tv' : 'win-flick'}" x="${x}" y="${y}" width="${w}" height="${h}" fill="${tv ? '#8fb8ff' : on ? dark : lit}" style="${timing}"/>`;
+      }
     }
   }
   return out;
@@ -195,32 +203,77 @@ export function scene(key) {
 }
 
 // What the player sees out of their own window. Changes a little every day.
+// Ambient motion (clouds, birds, stars, window lights, a passing car) is driven by CSS in desk.css.
 export function windowView(day) {
   const sky = {
     1: ['#f6a66b', '#7b5ea7'], 2: ['#d9806b', '#4b3f78'], 3: ['#4a5f8f', '#1d2747'],
     4: ['#1c2440', '#0b0f1e'], 5: ['#0b1020', '#05070d'],
   }[day] || ['#0b1020', '#05070d'];
   const lit = { 1: 0.4, 2: 0.32, 3: 0.24, 4: 0.14, 5: 0.06 }[day] ?? 0.06;
+  const live = { 1: 0.12, 2: 0.12, 3: 0.14, 4: 0.16, 5: 0.1 }[day] ?? 0.1;
   const r = rand(5);
+  const d = rand(13 + day);
   const id = 'g' + (++uid);
+
+  // Never rain: rain in a window is a clue elsewhere (a_rain).
+  let clouds = '';
+  if (day <= 3) {
+    const tint = day === 3 ? '#8fa0c8' : '#ffe0c8';
+    for (let i = 0; i < 3; i++) {
+      const y = 12 + d() * 34, s = 0.7 + d() * 0.6;
+      clouds += `<g class="cloud" style="animation-duration:${70 + d() * 50}s;animation-delay:-${d() * 120}s">
+        <g transform="translate(0 ${y}) scale(${s})" fill="${tint}" opacity="${day === 3 ? 0.22 : 0.32}">
+          <ellipse cx="0" cy="0" rx="26" ry="7"/><ellipse cx="-10" cy="-4" rx="12" ry="7"/><ellipse cx="9" cy="-5" rx="14" ry="8"/>
+        </g></g>`;
+    }
+  }
+
+  let stars = '';
+  const starCount = { 3: 8, 4: 16, 5: 22 }[day] || 0;
+  for (let i = 0; i < starCount; i++) {
+    stars += `<circle class="star" cx="${(d() * 266).toFixed(1)}" cy="${(3 + d() * 62).toFixed(1)}" r="${(0.5 + d() * 0.7).toFixed(2)}" fill="#e8ecf5"
+      style="animation-duration:${2.5 + d() * 4}s;animation-delay:-${d() * 6}s"/>`;
+  }
+
+  const birds = day <= 2 ? `<g class="birds"><g fill="none" stroke="#2a2235" stroke-width="1" stroke-linecap="round">
+      <path class="wing" d="M0 30 q3 -3 6 0 q3 -3 6 0"/>
+      <path class="wing" d="M14 24 q2.5 -2.5 5 0 q2.5 -2.5 5 0" style="animation-delay:-.2s"/>
+      <path class="wing" d="M-12 22 q2.5 -2.5 5 0 q2.5 -2.5 5 0" style="animation-delay:-.4s"/>
+    </g></g>` : '';
+
+  const night = day >= 4;
+  const car = `<g class="car" style="animation-duration:${{ 1: 14, 2: 16, 3: 20, 4: 26, 5: 34 }[day] ?? 34}s">
+      ${night || day === 3 ? '<polygon points="0,210 46,204 46,220" fill="#ffe7b0" opacity=".16"/>' : ''}
+      <rect x="-34" y="204" width="34" height="10" rx="3" fill="#2a2e35"/>
+      <rect x="-26" y="199" width="18" height="7" rx="2" fill="#23272d"/>
+      <circle cx="-1" cy="208" r="1.6" fill="#ffe7b0"/>
+      <rect x="-34" y="206" width="2" height="3" fill="#e0453a"/>
+      <circle cx="-26" cy="214" r="3.5" fill="#0d0f12"/><circle cx="-8" cy="214" r="3.5" fill="#0d0f12"/>
+    </g>`;
+
   const van = day >= 2 ? `
     <rect x="118" y="170" width="84" height="32" rx="4" fill="#7d838a"/>
     <rect x="180" y="174" width="18" height="12" fill="#22282e"/>
+    <circle class="rec-dot" cx="193" cy="177" r="1.3" fill="#ff2a2a"/>
     <circle cx="136" cy="203" r="7" fill="#111"/><circle cx="186" cy="203" r="7" fill="#111"/>
     <rect x="124" y="190" width="22" height="7" fill="#e9e3d2"/>
     <text x="135" y="196" text-anchor="middle" font-family="monospace" font-size="5" fill="#111">DH-0003</text>` : '';
   const watcher = day >= 5 ? person(224, 200, 0.42, '#05070a') : '';
+  const lamp = { 1: 'lamp-glow', 2: 'lamp-glow', 3: 'lamp-flicker' }[day] || '';
   return `<svg viewBox="0 0 266 226" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
     <defs><linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="${sky[1]}"/><stop offset="1" stop-color="${sky[0]}"/></linearGradient></defs>
     <rect width="266" height="226" fill="url(#${id})"/>
-    <rect x="0" y="70" width="70" height="140" fill="#1a1f27"/>${windows(r, 8, 80, 3, 6, 14, 12, 8, lit)}
-    <rect x="80" y="40" width="96" height="170" fill="#151a21"/>${windows(r, 90, 50, 4, 7, 14, 12, 8, lit)}
-    <rect x="186" y="90" width="80" height="120" fill="#1d222a"/>${windows(r, 194, 100, 3, 5, 16, 12, 8, lit)}
+    ${stars}${clouds}${birds}
+    <rect x="0" y="70" width="70" height="140" fill="#1a1f27"/>${windows(r, 8, 80, 3, 6, 14, 12, 8, lit, undefined, undefined, live)}
+    <rect x="80" y="40" width="96" height="170" fill="#151a21"/>${windows(r, 90, 50, 4, 7, 14, 12, 8, lit, undefined, undefined, live)}
+    <rect x="186" y="90" width="80" height="120" fill="#1d222a"/>${windows(r, 194, 100, 3, 5, 16, 12, 8, lit, undefined, undefined, live)}
     <rect y="196" width="266" height="30" fill="#202428"/>
     <rect x="34" y="120" width="4" height="80" fill="#0d0f12"/>
-    <circle cx="36" cy="118" r="${day >= 4 ? 0 : 16}" fill="#ffd27a" opacity=".22"/>
-    <circle cx="36" cy="118" r="4" fill="${day >= 4 ? '#333' : '#ffe7b0'}"/>
-    ${van}${watcher}
+    <g class="${lamp}">
+      <circle cx="36" cy="118" r="${day >= 4 ? 0 : 16}" fill="#ffd27a" opacity=".22"/>
+      <circle cx="36" cy="118" r="4" fill="${day >= 4 ? '#333' : '#ffe7b0'}"/>
+    </g>
+    ${van}${car}${watcher}
   </svg>`;
 }

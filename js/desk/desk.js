@@ -9,6 +9,18 @@ const stage = () => document.getElementById('stage');
 export function initDesk() {
   fit();
   addEventListener('resize', fit);
+  scatterDust();
+}
+
+// Dust motes drifting through the lamp light. Motion lives in desk.css; each mote gets its own path.
+function scatterDust(n = 26) {
+  const rnd = (a, b) => a + Math.random() * (b - a);
+  document.getElementById('dust').innerHTML = Array.from({ length: n }, () => {
+    const size = rnd(1.5, 3.5).toFixed(1);
+    return `<i style="left:${rnd(0, 100).toFixed(1)}%;top:${rnd(5, 90).toFixed(1)}%;width:${size}px;height:${size}px;`
+      + `--dx:${rnd(-60, 60).toFixed(0)}px;--dy:${rnd(-90, -20).toFixed(0)}px;--o:${rnd(0.15, 0.45).toFixed(2)};`
+      + `animation-duration:${rnd(18, 40).toFixed(1)}s;animation-delay:-${rnd(0, 40).toFixed(1)}s"></i>`;
+  }).join('');
 }
 
 function fit() {
@@ -43,16 +55,18 @@ const DAYS = [
   { label: 'Tue', note: '' },
   { label: 'Wed', note: '' },
   { label: 'Thu', note: '' },
-  { label: 'Fri', note: 'RENT! noon' },
+  { label: 'Fri', note: 'RENT! noon', due: true },
 ];
 
+// The tent calendar on the desk: one column per weekday.
 export function renderCalendar(day) {
   const items = DAYS.map((d, i) => {
     const n = i + 1;
-    const cls = n === day ? 'today' : n < day ? 'past' : '';
-    return `<li class="${cls}"><span>${d.label}</span><span class="hand">${d.note}</span></li>`;
+    const cls = [n === day ? 'today' : n < day ? 'past' : '', d.due ? 'due' : ''].join(' ').trim();
+    return `<div class="cal-day ${cls}"><b>${d.label}</b><span class="hand">${d.note}</span></div>`;
   }).join('');
-  document.getElementById('calendar').innerHTML = `<h5>THIS WEEK</h5><ul>${items}</ul>`;
+  document.getElementById('calendar').innerHTML =
+    `<div class="cal-rings">${'<i></i>'.repeat(8)}</div><h5>THIS WEEK</h5><div class="cal-days">${items}</div>`;
 }
 
 export function showOverlay(html) {

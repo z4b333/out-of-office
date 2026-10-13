@@ -2,11 +2,12 @@ import { state, esc, WEEKDAYS } from '../core/state.js';
 import { showOverlay, hideOverlay } from './desk.js';
 import { on } from '../core/bus.js';
 
+// Spots on the pegboard above the phone.
 const SLOTS = [
-  { x: 10, y: 0, r: -4 },
-  { x: 160, y: 10, r: 5 },
-  { x: 30, y: 125, r: 3 },
-  { x: 165, y: 120, r: -6 },
+  { x: 28, y: 48, r: -4 },
+  { x: 136, y: 100, r: 5 },
+  { x: 40, y: 158, r: 3 },
+  { x: 150, y: 10, r: -5 },
 ];
 
 let count = 0;
@@ -40,6 +41,7 @@ export function addNote(text, { strange = false } = {}) {
   el.style.left = slot.x + 'px';
   el.style.top = slot.y + 'px';
   el.style.setProperty('--r', slot.r + 'deg');
+  el.style.setProperty('--sway', (5 + Math.random() * 3).toFixed(1) + 's');
   el.textContent = text;
   document.getElementById('notes').appendChild(el);
 }

@@ -43,41 +43,57 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .wall {
   position: absolute;
   inset: 0 0 340px 0;
-  background: linear-gradient(var(--wall), var(--wall-2));
+  background:
+    radial-gradient(ellipse 560px 460px at 190px 190px, var(--dusk), transparent 70%),
+    radial-gradient(ellipse 760px 520px at 820px 330px, rgba(120, 180, 230, .12), transparent 70%),
+    linear-gradient(var(--wall), var(--wall-2));
   transition: background 1.2s;
 }
 
+/* ---------- Desk (one camera, looking slightly down) ---------- */
+/* Planks run toward a vanishing point above the laptop; the front face holds the drawer. */
 .desk-surface {
   position: absolute;
-  left: 0; right: 0; bottom: 0;
-  height: 340px;
-  background:
-    repeating-linear-gradient(92deg, transparent 0 60px, rgba(0,0,0,.05) 60px 62px),
-    linear-gradient(var(--desk), var(--desk-2));
-  border-top: 12px solid var(--desk-edge);
-  box-shadow: inset 0 30px 60px rgba(0,0,0,.25);
+  left: 0; top: 560px;
+  width: 1600px; height: 340px;
+  display: block;
 }
 
 /* ---------- Window ---------- */
 .window {
   position: absolute;
-  left: 40px; top: 40px;
-  width: 290px; height: 250px;
-  border: 12px solid #cfc7b6;
+  left: 40px; top: 28px;
+  width: 290px; height: 304px;
+  border: 12px solid #d9cfba;
   border-radius: 4px;
   background: #000;
   overflow: hidden;
-  box-shadow: 0 8px 20px rgba(0,0,0,.4), inset 0 0 0 2px #a49c8b;
+  box-shadow: 0 14px 30px rgba(0,0,0,.45), inset 0 0 0 2px #b3a790;
 }
 .window svg { display: block; width: 100%; height: 100%; }
 .window::before, .window::after {
   content: '';
   position: absolute;
-  background: #cfc7b6;
+  background: #d9cfba;
   z-index: 2;
 }
 .window::before { left: 50%; top: 0; bottom: 0; width: 8px; margin-left: -4px; }
 .window::after { top: 50%; left: 0; right: 0; height: 8px; margin-top: -4px; }
+.window-glare {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(125deg, rgba(255,255,255,.12), rgba(255,255,255,0) 40%);
+}
+.window-sill {
+  position: absolute;
+  left: 30px; top: 328px;
+  width: 310px; height: 14px;
+  border-radius: 3px;
+  background: linear-gradient(#e2d8c3, #b3a790);
+  box-shadow: 0 6px 10px rgba(0,0,0,.35);
+}
 
 .laser {
   position: absolute;
@@ -96,29 +112,68 @@ button { font: inherit; color: inherit; cursor: pointer; }
   75% { transform: translate(2px, 3px); }
 }
 
-/* ---------- Sticky notes ---------- */
+/* ---------- Pegboard (behind the phone) and sticky notes ---------- */
+.pegboard {
+  position: absolute;
+  left: 1306px; top: 30px;
+  width: 278px; height: 520px;
+  border: 6px solid #8a6644;
+  border-radius: 3px;
+  background:
+    radial-gradient(circle, rgba(40, 26, 14, .75) 2px, transparent 2.6px) 7px 7px / 22px 22px,
+    linear-gradient(160deg, #c49a6a, #a27a4e);
+  box-shadow: 0 16px 30px rgba(0,0,0,.45), inset 0 0 30px rgba(0,0,0,.25);
+}
+/* An empty metal hook. */
+.pegboard::before, .pegboard::after {
+  content: '';
+  position: absolute;
+  border-radius: 3px;
+  background: linear-gradient(90deg, #d8dce0, #8a9096);
+  box-shadow: 2px 3px 3px rgba(0,0,0,.4);
+}
+.pegboard::before { left: 232px; top: 30px; width: 6px; height: 22px; }
+.pegboard::after { left: 216px; top: 48px; width: 30px; height: 6px; background: linear-gradient(#d8dce0, #8a9096); }
+
+/* Only the part of the pegboard above the phone is visible. */
 .notes-area {
   position: absolute;
-  left: 30px; top: 310px;
-  width: 310px; height: 240px;
+  left: 1306px; top: 30px;
+  width: 278px; height: 262px;
 }
 .sticky {
   position: absolute;
-  width: 140px;
-  min-height: 112px;
-  padding: 12px 10px;
-  background: var(--note);
+  width: 92px;
+  height: 92px;
+  padding: 10px 8px;
+  background: linear-gradient(170deg, #fbe58c, var(--note));
   color: #3a3020;
   font-family: var(--font-hand);
-  font-size: 23px;
+  font-size: 17px;
   line-height: 1.05;
   white-space: pre-line;
-  box-shadow: 2px 6px 10px rgba(0,0,0,.35);
+  box-shadow: 1px 6px 8px rgba(0,0,0,.4);
   transform: rotate(var(--r, 0deg));
-  animation: slap .35s cubic-bezier(.3, 1.6, .5, 1);
+  transform-origin: 50% 6px;
+  animation: slap .35s cubic-bezier(.3, 1.6, .5, 1), sway var(--sway, 6s) ease-in-out .35s infinite;
+}
+/* A strip of tape: the note hangs from it and sways a little in the room's air. */
+.sticky::before {
+  content: '';
+  position: absolute;
+  left: 50%; top: -6px;
+  width: 30px; height: 11px;
+  margin-left: -15px;
+  background: rgba(255, 255, 255, .35);
+  box-shadow: 0 1px 2px rgba(0,0,0,.15);
+  transform: rotate(-3deg);
+}
+@keyframes sway {
+  0%, 100% { transform: rotate(var(--r, 0deg)); }
+  50% { transform: rotate(calc(var(--r, 0deg) + 1.4deg)); }
 }
 .sticky.strange {
-  background: var(--note-strange);
+  background: linear-gradient(170deg, #e2f3fb, var(--note-strange));
   color: #1d3340;
   font-style: italic;
   letter-spacing: .04em;
@@ -128,154 +183,124 @@ button { font: inherit; color: inherit; cursor: pointer; }
   to { transform: rotate(var(--r, 0deg)) scale(1); opacity: 1; }
 }
 
-/* ---------- Calendar ---------- */
+/* ---------- Desk calendar (a tent calendar standing left of the laptop) ---------- */
+.calendar-shadow {
+  position: absolute;
+  left: 22px; top: 670px;
+  width: 310px; height: 34px;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(0,0,0,.6), transparent);
+}
+.calendar-stand {
+  position: absolute;
+  left: 40px; top: 512px;
+  width: 272px; height: 172px;
+  background: linear-gradient(#5c4a3a, #3e3127);
+  clip-path: polygon(4% 0, 96% 0, 100% 100%, 0 100%);
+}
 .calendar {
   position: absolute;
-  left: 1330px; top: 40px;
-  width: 230px; height: 220px;
-  background: #f4efe4;
+  left: 44px; top: 502px;
+  width: 264px; height: 184px;
+  padding: 26px 12px 12px;
+  border-radius: 2px;
+  background: linear-gradient(#f6efe2, #e2d7c4);
   color: #2a2622;
-  border-radius: 4px;
-  box-shadow: 0 8px 20px rgba(0,0,0,.35);
-  padding: 14px;
   font-family: var(--font-ui);
+  transform: perspective(800px) rotateX(12deg);
+  transform-origin: 50% 100%;
+  box-shadow: 0 2px 0 #c9bca4, 0 10px 16px rgba(0,0,0,.35);
 }
-.calendar h5 { margin: 0 0 10px; font-size: 13px; letter-spacing: .2em; color: var(--accent); }
-.calendar ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
-.calendar li { display: flex; justify-content: space-between; font-size: 14px; padding: 3px 6px; border-radius: 4px; }
-.calendar li.today { background: #2a2622; color: #f4efe4; }
-.calendar li.past { text-decoration: line-through; opacity: .5; }
-.calendar li .hand { font-family: var(--font-hand); font-size: 18px; color: var(--accent); }
+.cal-rings {
+  position: absolute;
+  left: 16px; right: 16px; top: -6px;
+  display: flex;
+  justify-content: space-between;
+}
+.cal-rings i { width: 5px; height: 14px; border-radius: 3px; background: linear-gradient(90deg, #8a8e94, #e4e6e9, #8a8e94); }
+.calendar h5 { margin: 0 0 12px; text-align: center; font: 600 12px var(--font-mono); letter-spacing: .24em; color: var(--accent); }
+.cal-days { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 5px; text-align: center; }
+.cal-day { min-height: 104px; padding: 6px 0 8px; border-radius: 4px; background: rgba(42, 38, 34, .05); }
+.cal-day b { display: block; font-size: 13px; font-weight: 600; }
+.cal-day .hand { display: block; margin-top: 10px; padding: 0 2px; font: 700 16px/1.05 var(--font-hand); color: var(--accent); overflow-wrap: anywhere; }
+.cal-day.today { background: #2a2622; color: #f4ede0; }
+.cal-day.today .hand { color: #ff9d8f; }
+.cal-day.past { opacity: .45; }
+.cal-day.past b { text-decoration: line-through; }
+.cal-day.due { box-shadow: inset 0 0 0 1.5px var(--accent); }
+
+/* Late in the week the room is lit only by the screen. */
+#stage[data-day="4"] :is(.window, .window-sill, .pegboard, .notes-area, .calendar, .calendar-stand),
+#stage[data-day="5"] :is(.window, .window-sill, .pegboard, .notes-area, .calendar, .calendar-stand) { filter: brightness(.75); }
 
 /* ---------- Mug ---------- */
 .mug {
   position: absolute;
-  left: 235px; top: 650px;
-  width: 120px; height: 130px;
+  left: 248px; top: 688px;
+  width: 140px; height: 150px;
   background: none; border: 0; padding: 0;
 }
-.mug-body {
-  position: absolute;
-  left: 10px; bottom: 0;
-  width: 84px; height: 98px;
-  background: linear-gradient(90deg, #2f5d99, #3f78c2 45%, #2a5287);
-  border-radius: 6px 6px 16px 16px;
-  overflow: hidden;
-  box-shadow: 0 10px 14px rgba(0,0,0,.4);
-}
-.mug-body::before {
-  content: '';
-  position: absolute;
-  left: 4px; right: 4px; top: 4px;
-  height: 12px;
-  border-radius: 50%;
-  background: #1c1410;
-  z-index: 1;
-}
-.mug-fill {
-  position: absolute;
-  left: 4px; right: 4px; top: 4px;
-  height: 12px;
-  border-radius: 50%;
-  background: #6b4226;
-  z-index: 2;
-  opacity: var(--fill, 1);
-  transition: opacity .4s;
-}
-.mug-chip {
-  position: absolute;
-  left: 52px; top: -2px;
-  width: 10px; height: 8px;
-  background: var(--desk);
-  clip-path: polygon(0 0, 100% 0, 60% 100%);
-  z-index: 3;
-}
-.mug-handle {
-  position: absolute;
-  left: 86px; bottom: 30px;
-  width: 30px; height: 44px;
-  border: 9px solid #2f5d99;
-  border-left: 0;
-  border-radius: 0 20px 20px 0;
-}
+.mug-art { display: block; width: 100%; height: 100%; overflow: visible; }
+.mug-fill { opacity: var(--fill, 1); transition: opacity .4s; }
 .mug-steam {
   position: absolute;
-  left: 40px; top: 0;
-  width: 20px; height: 30px;
-  border-left: 3px solid rgba(255,255,255,.35);
-  border-radius: 50%;
-  filter: blur(1px);
-  animation: steam 2.4s infinite;
+  left: 30px; top: 0;
+  width: 52px; height: 40px;
   opacity: var(--fill, 1);
+  transition: opacity .6s;
+  pointer-events: none;
 }
-@keyframes steam {
-  0% { transform: translateY(6px) scaleY(.8); opacity: 0; }
-  40% { opacity: .8; }
-  100% { transform: translateY(-14px) scaleY(1.2); opacity: 0; }
-}
-.mug:hover .mug-body { filter: brightness(1.12); }
-.mug::before {
-  content: '';
+.mug-steam i {
   position: absolute;
-  left: -6px; bottom: -12px;
-  width: 128px; height: 24px;
+  left: 18px; bottom: 0;
+  width: 18px; height: 30px;
+  border-left: 3px solid rgba(255,255,255,.32);
   border-radius: 50%;
-  background: radial-gradient(closest-side, rgba(0,0,0,.5), transparent);
+  filter: blur(1.2px);
+  opacity: 0;
+  animation: steam 3.2s ease-in-out infinite;
 }
+.mug-steam i:nth-child(2) { left: 6px; height: 24px; animation-duration: 3.8s; animation-delay: -1.3s; }
+.mug-steam i:nth-child(3) { left: 30px; height: 26px; animation-duration: 4.3s; animation-delay: -2.4s; }
+@keyframes steam {
+  0% { transform: translate(0, 8px) scaleY(.7) skewX(0deg); opacity: 0; }
+  35% { opacity: .75; }
+  70% { transform: translate(-4px, -10px) scaleY(1.1) skewX(-8deg); opacity: .35; }
+  100% { transform: translate(3px, -20px) scaleY(1.3) skewX(6deg); opacity: 0; }
+}
+.mug:hover .mug-art { filter: brightness(1.12); }
 
-/* ---------- Notebook (lying flat on the desk) ---------- */
+/* ---------- Notebook (lying flat on the desk, same camera) ---------- */
 .notebook {
   position: absolute;
-  left: 20px; top: 640px;
-  width: 210px; height: 220px;
+  left: 20px; top: 690px;
+  width: 250px; height: 160px;
   border: 0; padding: 0;
   background: none;
-  color: #d8d2c4;
 }
-.notebook::before {
-  content: '';
-  position: absolute;
-  left: 30px; right: 20px; bottom: 6px;
-  height: 46px;
-  border-radius: 50%;
-  background: radial-gradient(closest-side, rgba(0,0,0,.55), transparent);
-}
-.notebook-cover {
-  position: absolute;
-  left: 26px; top: 10px;
-  width: 165px; height: 205px;
-  display: grid;
-  place-items: center;
-  border-radius: 4px 10px 10px 4px;
-  background: linear-gradient(90deg, #0d0d0f 0 12px, #222327 12px);
-  box-shadow: 0 5px 0 #d8cfb8, 0 8px 0 #18181b;
-  transform: perspective(800px) rotateX(46deg) rotateZ(-12deg);
-  transform-origin: 50% 100%;
-  transition: filter .2s;
-}
-.notebook-cover::after {
-  content: '';
-  position: absolute;
-  right: 22px; top: 0; bottom: 0;
-  width: 7px;
-  background: #b0201a;
-}
-.notebook-label { font: 700 40px var(--font-hand); transform: rotate(-4deg); }
-.notebook:hover .notebook-cover { filter: brightness(1.25); }
+.notebook-art { display: block; width: 100%; height: 100%; overflow: visible; }
+.notebook:hover .notebook-art { filter: brightness(1.25); }
 .notebook-count {
   position: absolute;
-  right: 72px; top: 80px;
+  left: 162px; top: 0;
   min-width: 26px; height: 26px;
   border-radius: 13px;
   background: var(--accent);
   color: #fff;
   font: 700 13px/26px var(--font-ui);
-  box-shadow: 0 2px 6px rgba(0,0,0,.4);
+  box-shadow: 0 2px 6px rgba(0,0,0,.45);
 }
 .notebook.pulse .notebook-count { animation: pulse .6s 2; }
 @keyframes pulse { 50% { transform: scale(1.35); } }
 
 /* ---------- Laptop ---------- */
+.laptop-shadow {
+  position: absolute;
+  left: 330px; top: 700px;
+  width: 980px; height: 50px;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(0,0,0,.6), transparent);
+}
 .laptop {
   position: absolute;
   left: 350px; top: 20px;
@@ -288,18 +313,17 @@ button { font: inherit; color: inherit; cursor: pointer; }
   display: flex;
   flex-direction: column;
   background: #111;
-  border: 14px solid #1c1f23;
+  border: 14px solid #1a1d21;
   border-bottom-width: 22px;
   border-radius: 16px 16px 4px 4px;
   overflow: hidden;
-  box-shadow: 0 20px 40px rgba(0,0,0,.5), 0 0 80px var(--glow);
+  box-shadow: 0 0 0 1px #2a2f35, 0 0 80px var(--glow);
 }
+/* The keyboard deck, lying on the desk in front of the screen. */
 .laptop-base {
-  height: 24px;
-  margin: 0 -50px;
-  background: linear-gradient(#c9ccd1, #8d9096);
-  border-radius: 0 0 30px 30px;
-  box-shadow: 0 10px 20px rgba(0,0,0,.45);
+  display: block;
+  width: 1060px; height: 64px;
+  margin: -6px 0 0 -60px;
 }
 .menubar {
   height: 28px;
@@ -632,29 +656,28 @@ button { font: inherit; color: inherit; cursor: pointer; }
 /* ---------- Desk drawer (front edge of the desk) ---------- */
 .drawer {
   position: absolute;
-  left: 600px; top: 846px;
-  width: 400px; height: 54px;
+  left: 600px; top: 854px;
+  width: 400px; height: 40px;
   border: 0;
-  border-top: 2px solid rgba(255,255,255,.07);
-  border-radius: 4px 4px 0 0;
+  border-radius: 3px;
   background: linear-gradient(var(--desk-edge), #120d09);
-  box-shadow: inset 0 0 0 1px rgba(0,0,0,.4);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.08), inset 0 0 0 1px rgba(0,0,0,.5);
 }
 .drawer::after {
   content: '';
   position: absolute;
-  left: 50%; top: 18px;
-  width: 90px; height: 10px;
+  left: 50%; top: 15px;
+  width: 90px; height: 9px;
   margin-left: -45px;
   border-radius: 5px;
-  background: linear-gradient(#b9b2a3, #6d675c);
+  background: linear-gradient(#e4c27a, #8f6c2e);
   box-shadow: 0 2px 3px rgba(0,0,0,.6);
 }
 .drawer:hover { filter: brightness(1.3); }
-.drawer-label { position: absolute; left: 16px; top: 16px; font: 20px var(--font-hand); color: rgba(255,255,255,.25); }
+.drawer-label { position: absolute; left: 16px; top: 8px; font: 20px var(--font-hand); color: rgba(255,255,255,.25); }
 .drawer-new {
   position: absolute;
-  right: 14px; top: 14px;
+  right: 14px; top: 10px;
   padding: 2px 8px;
   border-radius: 10px;
   background: var(--accent);
@@ -674,3 +697,154 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .prologue-dots { display: flex; gap: 6px; margin-top: 22px; }
 .prologue-dots i { width: 8px; height: 8px; border-radius: 50%; background: var(--panel-line); }
 .prologue-dots i.on { background: var(--accent); }
+
+/* ---------- Ambient motion ---------- */
+/* Slow and quiet on purpose: the room should feel alive without pulling focus from the files. */
+
+/* The window view (inline SVG from art.js). CSS px here are SVG user units. */
+.window .cloud { animation: cloud-drift linear infinite; }
+@keyframes cloud-drift {
+  from { transform: translateX(-50px); }
+  to { transform: translateX(320px); }
+}
+.window .star { animation: twinkle ease-in-out infinite; }
+@keyframes twinkle { 50% { opacity: .25; } }
+.window .birds { transform: translateX(-40px); animation: birds 34s linear infinite; }
+@keyframes birds {
+  0% { transform: translate(-40px, 6px); }
+  40% { transform: translate(300px, -10px); }
+  100% { transform: translate(300px, -10px); }
+}
+.window .wing { transform-box: fill-box; transform-origin: center; animation: flap .5s ease-in-out infinite alternate; }
+@keyframes flap { to { transform: scaleY(-.6); } }
+.window .win-flick { opacity: 0; animation: win-toggle linear infinite; }
+@keyframes win-toggle {
+  0%, 58% { opacity: 0; }
+  59%, 88% { opacity: .9; }
+  89%, 100% { opacity: 0; }
+}
+.window .win-tv { opacity: 0; animation: win-tv steps(1) infinite; }
+@keyframes win-tv {
+  0% { opacity: .35; } 13% { opacity: .15; } 27% { opacity: .5; } 41% { opacity: .25; }
+  55% { opacity: .45; } 70% { opacity: .1; } 84% { opacity: .4; } 100% { opacity: .2; }
+}
+.window .car { transform: translateX(-80px); animation: car-pass linear infinite; }
+@keyframes car-pass {
+  0% { transform: translateX(-80px); }
+  28% { transform: translateX(330px); }
+  100% { transform: translateX(330px); }
+}
+.window .rec-dot { animation: rec 2.4s ease-in-out infinite; }
+@keyframes rec { 50% { opacity: .15; } }
+.window .lamp-glow { animation: lamp-breathe 5s ease-in-out infinite; }
+@keyframes lamp-breathe { 50% { opacity: .75; } }
+/* Wednesday the streetlight starts to fail. By Thursday it's out. */
+.window .lamp-flicker { animation: lamp-flicker 7s steps(1) infinite; }
+@keyframes lamp-flicker {
+  0%, 100% { opacity: 1; }
+  61% { opacity: .2; } 62% { opacity: 1; } 64% { opacity: .1; } 66% { opacity: .9; }
+  83% { opacity: .3; } 84% { opacity: 1; }
+}
+
+/* Dust motes drifting through the lamp light (spawned by desk.js). */
+.dust {
+  position: absolute;
+  inset: 0;
+  z-index: 55;
+  pointer-events: none;
+}
+.dust i {
+  position: absolute;
+  border-radius: 50%;
+  background: var(--mote);
+  box-shadow: 0 0 6px var(--mote);
+  opacity: 0;
+  animation: mote linear infinite;
+}
+@keyframes mote {
+  0% { transform: translate(0, 0); opacity: 0; }
+  15%, 80% { opacity: var(--o, .3); }
+  100% { transform: translate(var(--dx), var(--dy)); opacity: 0; }
+}
+
+/* The room light breathes. On Friday it can't hold steady. */
+#stage::after { animation: breathe 10s ease-in-out infinite; }
+@keyframes breathe { 50% { opacity: .84; } }
+#stage[data-day="5"]::after { animation: unsteady 9s ease-in-out infinite; }
+@keyframes unsteady {
+  0%, 100% { opacity: 1; }
+  40% { opacity: .86; }
+  44% { opacity: .6; } 45% { opacity: .95; } 47% { opacity: .7; } 49% { opacity: .9; }
+  70% { opacity: .82; }
+}
+
+/* Screen light spilling onto the wall and desk, and a faint sheen sliding across the glass. */
+.laptop::before {
+  content: '';
+  position: absolute;
+  left: -160px; right: -160px; top: -80px;
+  height: 860px;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(ellipse at 50% 42%, var(--screen-glow), transparent 62%);
+  animation: screen-glow 7s ease-in-out infinite;
+  transition: opacity 1.5s;
+}
+@keyframes screen-glow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .7; }
+  52% { opacity: .85; }
+}
+.laptop-screen::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+  background: linear-gradient(115deg, transparent 38%, rgba(255,255,255,.035) 46%, rgba(255,255,255,.01) 52%, transparent 60%) 0 0 / 300% 100%;
+  animation: glass-sheen 16s ease-in-out infinite alternate;
+}
+@keyframes glass-sheen {
+  from { background-position: 100% 0; }
+  to { background-position: 0 0; }
+}
+#stage.blackout .laptop::before,
+#stage.blackout .laptop-screen::after { opacity: 0; animation: none; }
+
+/* Light catching the phone glass now and then. */
+.phone-screen::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  background: linear-gradient(120deg, transparent 40%, rgba(255,255,255,.22) 50%, transparent 60%) 0 0 / 300% 100% no-repeat;
+  background-position: 150% 0;
+  animation: phone-sheen 12s ease-in-out infinite;
+}
+@keyframes phone-sheen {
+  0% { background-position: 150% 0; }
+  14%, 100% { background-position: -50% 0; }
+}
+
+/* Desk calendar: today softly marked. */
+.cal-day.today { animation: today 3.2s ease-in-out infinite; }
+@keyframes today {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(224, 69, 58, 0); }
+  50% { box-shadow: 0 0 0 3px rgba(224, 69, 58, .35); }
+}
+
+/* Desk objects lift a little under the cursor; their shadows stay on the desk. */
+.mug-lift, .nb-lift { transition: transform .25s ease-out; }
+.mug:hover .mug-lift { transform: translateY(-4px); }
+.notebook:hover .nb-lift { transform: translateY(-5px); }
+
+/* Panels rise into place instead of just appearing. */
+.panel { animation: rise .5s cubic-bezier(.2, .8, .2, 1) both; }
+@keyframes rise { from { transform: translateY(16px) scale(.98); opacity: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .window *, .dust, .sticky, .cal-day, .panel,
+  #stage::after, .laptop::before, .laptop-screen::after, .phone-screen::after { animation: none !important; }
+  .dust, .window .car, .window .birds { display: none; }
+}
