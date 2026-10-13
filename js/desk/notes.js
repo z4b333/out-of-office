@@ -40,6 +40,7 @@ export function addNote(text, { strange = false } = {}) {
   el.style.left = slot.x + 'px';
   el.style.top = slot.y + 'px';
   el.style.setProperty('--r', slot.r + 'deg');
+  el.style.setProperty('--sway', (5 + Math.random() * 3).toFixed(1) + 's');
   el.textContent = text;
   document.getElementById('notes').appendChild(el);
 }

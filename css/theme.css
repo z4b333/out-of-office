@@ -28,6 +28,8 @@
   --desk-edge: #3a2c22;
   --glow: rgba(255, 190, 120, 0.10);
   --shade: rgba(0, 0, 0, 0.35);
+  --mote: rgba(255, 220, 170, 1);
+  --screen-glow: rgba(140, 190, 255, 0.08);
 }
 
 #stage[data-day="3"] {
@@ -38,6 +40,8 @@
   --desk-edge: #2d221a;
   --glow: rgba(120, 200, 255, 0.10);
   --shade: rgba(0, 0, 0, 0.5);
+  --mote: rgba(220, 225, 240, 1);
+  --screen-glow: rgba(120, 190, 255, 0.11);
 }
 
 #stage[data-day="4"],
@@ -49,4 +53,6 @@
   --desk-edge: #18120e;
   --glow: rgba(110, 220, 255, 0.16);
   --shade: rgba(0, 0, 0, 0.68);
+  --mote: rgba(170, 220, 255, 1);
+  --screen-glow: rgba(110, 200, 255, 0.15);
 }
